@@ -28,8 +28,9 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("primary.fxml"));
         scene = new Scene(loader.load(), 640, 480);
         Dc dc = loader.getController();
+        dc.initialize();
         
-        dc.loadImage("src/main/resources/com/d3dev/02_02_400d_ 23.png");
+        //dc.loadImage("src/main/resources/com/d3dev/02_02_400d_ 23.png");
 
         stage.setScene(scene);
         stage.show();
