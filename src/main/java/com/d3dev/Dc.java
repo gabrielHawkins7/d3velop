@@ -3,24 +3,24 @@ package com.d3dev;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.robot.Robot;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
+@SuppressWarnings("exports")
 public class Dc {
 
     @FXML
@@ -44,7 +44,10 @@ public class Dc {
     @FXML
     private Button fileOpenButton;
 
-    private Image ogImage;
+    @FXML
+    private Slider satSlider;
+
+    private File ogImage;
     private Image curImage;
 
     
@@ -54,6 +57,7 @@ public class Dc {
         imgview.setPreserveRatio(true);
         //imgview.setSmooth(false);
         initColorPicker();
+        satSliderinit();
     }
 
     void initColorPicker(){
@@ -66,19 +70,21 @@ public class Dc {
 
 
     void loadImage(String url) throws FileNotFoundException{
-        ogImage = new Image(new FileInputStream(url));
-        curImage = ogImage;
+        ogImage = new File(url);
+        curImage = new Image(new FileInputStream(url));
         imgview.setImage(curImage);
         imgview.setSmooth(false);
         imgview.setFitWidth(ap.getWidth());
         fileOpenButton.setVisible(false);
     }
-    void fitImage(){
-        if(curImage.getHeight() > curImage.getWidth()){
-            imgview.setFitHeight(ap.getHeight());
-        }else{
-            imgview.setFitWidth(ap.getWidth());
-        }
+
+    void satSliderinit(){
+        satSlider.valueProperty().addListener(e->{
+            ColorAdjust ca = new ColorAdjust();
+            ca.setSaturation(satSlider.getValue());
+            imgview.setEffect(ca);
+            
+        });
     }
 
     @FXML
@@ -106,13 +112,17 @@ public class Dc {
     }
     @FXML
     void rotateRight(){
-        curImage = ImageTransformer.rotateImage(curImage, 90);
-        imgview.setImage(curImage);
+        if(curImage != null){
+            curImage = ImageTransformer.rotateImage(curImage, 90);
+            imgview.setImage(curImage);
+        }
     }
     @FXML
     void rotateLeft(){
-        curImage = ImageTransformer.rotateImage(curImage, -90);
-        imgview.setImage(curImage);
+        if(curImage != null){
+            curImage = ImageTransformer.rotateImage(curImage, -90);
+            imgview.setImage(curImage);
+        }
     }
 
 
