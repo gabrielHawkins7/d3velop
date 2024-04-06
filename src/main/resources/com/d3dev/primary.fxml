@@ -8,7 +8,6 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -17,78 +16,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="ap" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.d3dev.Dc">
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.d3dev.Dc">
    <children>
-      <SplitPane fx:id="splitPane" dividerPositions="0.7918060200668896" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <items>
-            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
-               <content>
-                  <StackPane fx:id="imgpane">
-                     <children>
-                        <ImageView fx:id="imgview" pickOnBounds="true" preserveRatio="true" />
-                        <Button fx:id="fileOpenButton" mnemonicParsing="false" onAction="#openFile" text="Open" />
-                     </children>
-                  </StackPane>
-               </content>
-            </ScrollPane>
-            <VBox fx:id="vbox" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <HBox alignment="CENTER">
-                     <children>
-                        <Label prefWidth="124.0" text="   Current Color">
-                           <graphic>
-                              <Rectangle fx:id="colorPickerBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="20.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                           </graphic>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <Separator>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin></Separator>
-                  <HBox alignment="CENTER">
-                     <children>
-                        <Label text="Transform" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#rotateLeft" text="↶90">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Button>
-                        <Button layoutX="50.0" layoutY="10.0" mnemonicParsing="false" onAction="#rotateRight" text="↷90">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <Separator layoutX="10.0" layoutY="40.0">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Separator>
-                  <HBox alignment="CENTER">
-                     <children>
-                        <Label text="Color Adjustment" />
-                     </children>
-                  </HBox>
-                  <Label alignment="CENTER" text="Saturation">
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Slider fx:id="satSlider" blockIncrement="0.1" majorTickUnit="0.5" max="1.0" min="-1.0" minorTickCount="2" showTickMarks="true" />
-               </children>
-            </VBox>
-         </items>
-      </SplitPane>
-      <MenuBar opacity="0.0" useSystemMenuBar="true">
+      <MenuBar>
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -102,5 +32,75 @@
           </Menu>
         </menus>
       </MenuBar>
+      <AnchorPane fx:id="ap" VBox.vgrow="ALWAYS">
+         <children>
+            <SplitPane fx:id="splitPane" dividerPositions="0.7918060200668896" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <items>
+                  <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+                     <content>
+                        <StackPane fx:id="imgpane">
+                           <children>
+                              <ImageView fx:id="imgview" pickOnBounds="true" preserveRatio="true" />
+                              <Button fx:id="fileOpenButton" mnemonicParsing="false" onAction="#openFile" text="Open" />
+                           </children>
+                        </StackPane>
+                     </content>
+                  </ScrollPane>
+                  <VBox fx:id="vbox" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Label prefWidth="124.0" text="   Current Color">
+                                 <graphic>
+                                    <Rectangle fx:id="colorPickerBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="20.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                                 </graphic>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Separator>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Label text="Transform" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#rotateLeft" text="↶90">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Button>
+                              <Button layoutX="50.0" layoutY="10.0" mnemonicParsing="false" onAction="#rotateRight" text="↷90">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <Separator layoutX="10.0" layoutY="40.0">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Label text="Color Adjustment" />
+                           </children>
+                        </HBox>
+                        <VBox fx:id="colorControlBox" />
+                        <Button mnemonicParsing="false" onAction="#invert" text="Invert" />
+                     </children>
+                  </VBox>
+               </items>
+            </SplitPane>
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</VBox>

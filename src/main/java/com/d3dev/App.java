@@ -1,6 +1,9 @@
 package com.d3dev;
 
-`import java.io.IOException;
+import java.io.IOException;
+
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.opencv.opencv_java;
 
 import atlantafx.base.theme.Dracula;
 import javafx.application.Application;
@@ -18,8 +21,11 @@ public class App extends Application {
 
     private static Scene scene;
 
+    
+
     @Override
     public void start(Stage stage) throws IOException {
+        //Loader.load(opencv_java.class);
 
         Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
         FXMLLoader loader = new FXMLLoader(App.class.getResource("primary.fxml"));
@@ -42,6 +48,8 @@ public class App extends Application {
                 }
             }
         });
+
+        System.out.println();
         
 
 

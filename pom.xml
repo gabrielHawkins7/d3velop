@@ -9,10 +9,38 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
+
+    <repositories>
+        <repository>
+        <id>SciJava</id>
+            <url>https://maven.scijava.org/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
+
     <dependencies>
 
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.5.10</version>
+        </dependency>
 
 
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>4.9.0-0</version>
+        </dependency>
+
+        
+
+
+
+
+        
+
+        
 
         <dependency>
             <groupId>io.github.mkpaz</groupId>
