@@ -42,6 +42,7 @@
                            <children>
                               <ImageView fx:id="imgview" pickOnBounds="true" preserveRatio="true" />
                               <Button fx:id="fileOpenButton" mnemonicParsing="false" onAction="#openFile" text="Open" />
+                              <Rectangle fx:id="cropRec" arcHeight="5.0" arcWidth="5.0" fill="#0000002c" height="200.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="5.0" width="200.0" />
                            </children>
                         </StackPane>
                      </content>
@@ -82,6 +83,16 @@
                                     <Insets />
                                  </HBox.margin>
                               </Button>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="43.0">
+                           <children>
+                              <Label text="Crop" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#onCrop" text="Crop" />
                            </children>
                         </HBox>
                         <Separator layoutX="10.0" layoutY="40.0">

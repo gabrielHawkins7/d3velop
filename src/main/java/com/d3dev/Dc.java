@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.swing.text.AttributeSet.ColorAttribute;
+
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.indexer.UByteArrayIndexer;
 import org.bytedeco.javacpp.indexer.UByteBufferIndexer;
@@ -18,6 +20,9 @@ import org.bytedeco.opencv.opencv_core.Algorithm;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.MatVector;
 import org.bytedeco.opencv.opencv_core.Scalar;
+import org.bytedeco.opencv.opencv_photo.Tonemap;
+import org.bytedeco.opencv.opencv_photo.TonemapReinhard;
+import org.bytedeco.opencv.opencv_xphoto.TonemapDurand;
 import org.bytedeco.opencv.opencv_xphoto.WhiteBalancer;
 import org.opencv.core.Core;
 
@@ -69,15 +74,25 @@ public class Dc {
     @FXML
     private VBox colorControlBox;
 
+
+    @FXML
+    private Rectangle cropRec;
+
     @SuppressWarnings("unused")
     private File ogImage;
     private Image curImage;
     static public Mat curMat;
     static public Mat outMat;
     int brightness = 0;
+
+
+
+    double mouseDownY;
+    double mouseDownX;
     
     void initialize(){
         outMat = new Mat();
+        cropRec.setVisible(false);
         imgview.minWidth(0);
         imgview.minHeight(0);
         imgview.setPreserveRatio(true);
@@ -91,6 +106,8 @@ public class Dc {
             Robot robot = new Robot();
             Color color = robot.getPixelColor(e.getScreenX(), e.getScreenY());
             colorPickerBox.setFill(color);
+            //R:0.7843137383460999 G:0.5960784554481506 B:0.47843137383461
+            //System.out.println("R:" + color.getRed() + " G:" + color.getGreen() + " B:" + color.getBlue());
         });
     }
 
@@ -142,37 +159,68 @@ public class Dc {
     }
     @FXML
     void rotateRight(){
-        if(curMat != null){
+        if(outMat != null){
+            opencv_core.rotate(outMat, outMat, opencv_core.ROTATE_90_CLOCKWISE);
+            imgview.setImage(ImageTransformer.toFXImage(outMat));
+        }else if(curMat != null){
             opencv_core.rotate(curMat, curMat, opencv_core.ROTATE_90_CLOCKWISE);
             imgview.setImage(ImageTransformer.toFXImage(curMat));
+        }else{
+            return;
         }
     }
     @FXML
     void rotateLeft(){
-        if(curMat != null){
+        if(outMat != null){
+            opencv_core.rotate(outMat, outMat, opencv_core.ROTATE_90_COUNTERCLOCKWISE);
+            imgview.setImage(ImageTransformer.toFXImage(outMat));
+        }else if(curMat != null){
             opencv_core.rotate(curMat, curMat, opencv_core.ROTATE_90_COUNTERCLOCKWISE);
             imgview.setImage(ImageTransformer.toFXImage(curMat));
+        }else{
+            return;
         }
     }
     @FXML
     void invert(){
-        WhiteBalancer wb = new WhiteBalancer(opencv_xphoto.createSimpleWB());
-        wb.balanceWhite(curMat, curMat);
-        opencv_core.bitwise_not(curMat, curMat);
-        imgview.setImage(ImageTransformer.toFXImage(curMat));
+        // // curMat = ColorTransformer.balanceWhite(curMat);
+        // WhiteBalancer wb = new WhiteBalancer(opencv_xphoto.createSimpleWB());
+        // wb.balanceWhite(curMat, curMat);
+        // opencv_core.bitwise_not(curMat, curMat);
+        // imgview.setImage(ImageTransformer.toFXImage(curMat));
+        curMat.convertTo(outMat, -1);
+        outMat = ColorTransformer.invert(outMat);
+        imgview.setImage(ImageTransformer.toFXImage(outMat));
     }
 
-    void changeBrightness(Double g){
-        curMat.convertTo(outMat, -1,1,g);
+    void changeBrightness(double b){
+        curMat.convertTo(outMat, -1);
+        outMat = ColorTransformer.changeBrightness(outMat, b);
         imgview.setImage(ImageTransformer.toFXImage(outMat));
     }
     void changeContrast(Double g){
-        curMat.convertTo(outMat, -1,g,0);
+        TonemapReinhard tr = new TonemapReinhard(opencv_photo.createTonemapReinhard(g.floatValue(), 0, 0, 1));
+        curMat.convertTo(outMat, opencv_core.CV_32FC3);
+        tr.process(outMat, outMat);
         imgview.setImage(ImageTransformer.toFXImage(outMat));
+        tr.close();
     }
     void changeBrightnessContrast(Double c , Double b){
         curMat.convertTo(outMat, -1,c ,b);
         imgview.setImage(ImageTransformer.toFXImage(outMat));
+    }
+
+    @FXML
+    void onCrop(){
+        cropRec.setVisible(true);
+        cropRec.setViewOrder(0.0);
+        imgpane.setOnMousePressed(e->{
+            mouseDownX = e.getSceneX();
+            mouseDownY = e.getSceneY();
+            cropRec.setX(mouseDownX);
+            cropRec.setY(mouseDownY);
+
+        });
     }
 
 

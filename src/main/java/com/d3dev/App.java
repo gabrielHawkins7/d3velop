@@ -2,9 +2,6 @@ package com.d3dev;
 
 import java.io.IOException;
 
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.opencv.opencv_java;
-
 import atlantafx.base.theme.Dracula;
 import javafx.application.Application;
 import javafx.event.EventHandler;

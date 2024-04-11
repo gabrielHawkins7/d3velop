@@ -1,14 +1,18 @@
 package com.d3dev;
 
 
+import org.bytedeco.javacpp.indexer.UByteIndexer;
 import org.bytedeco.opencv.global.opencv_core;
 import org.bytedeco.opencv.global.opencv_imgproc;
+import org.bytedeco.opencv.global.opencv_xphoto;
 import org.bytedeco.opencv.opencv_core.Mat;
+import org.bytedeco.opencv.opencv_core.MatVector;
+import org.bytedeco.opencv.opencv_imgproc.CLAHE;
+import org.bytedeco.opencv.opencv_xphoto.WhiteBalancer;
 
 import atlantafx.base.theme.Styles;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -20,24 +24,28 @@ import javafx.scene.paint.Color;
 public class ColorTransformer {
     static void buildColorControlBox(VBox vbox, ImageView imgview, Dc dc){
         Label brightLabel = new Label("Brightness");
-        Slider brightSlider = new Slider(-100,100,0);
+        Slider brightSlider = new Slider(-.9,.9,0);
         
         brightLabel.setOnMouseClicked(e->{
             brightSlider.setValue(0);
         });
         brightSlider.getStyleClass().add(Styles.SMALL);
         brightSlider.setShowTickMarks(true);
-        brightSlider.setMajorTickUnit(.5);
+        brightSlider.setMajorTickUnit(10);
         vbox.getChildren().addAll(brightLabel, brightSlider);
 
         Label conLabel = new Label("Contrast");
-        Slider conSlider = new Slider(.1,3,1);
+        Slider conSlider = new Slider(.1,2,1);
+        conLabel.setOnMouseClicked(e->{
+            conSlider.setValue(1);
+        });
         conSlider.valueProperty().addListener(e->{
             dc.changeBrightnessContrast(conSlider.getValue(), brightSlider.getValue());
         });
         brightSlider.valueProperty().addListener(e->{
-            dc.changeBrightnessContrast(conSlider.getValue(), brightSlider.getValue());
+            dc.changeBrightness(brightSlider.getValue());
         });
+    
         conSlider.getStyleClass().add(Styles.SMALL);
         conSlider.setShowTickMarks(true);
         conSlider.setMajorTickUnit(.5);
@@ -100,6 +108,102 @@ public class ColorTransformer {
         }
 
         return invertedImage;
+    }
+
+    static Mat balanceWhite(Mat i){
+        UByteIndexer srcIndexer = i.createIndexer();
+        int[] blackPoint = {0,0,0};
+        int[] whitepoint = {0,0,0};
+        double[] wp = {0.0,0.0,0.0};
+        srcIndexer.get(0,0,blackPoint);
+        srcIndexer.get(0,0,whitepoint);
+        
+
+        System.out.println(i.type() +" "+ i.channels());
+        System.out.println(srcIndexer.getDouble());
+
+        System.out.print("\nOg BlackPoint : ");
+
+        for(int n : blackPoint){
+            System.out.print(n  + " ");
+        }
+        System.out.println("");
+        System.out.print("\nOg WhitePoint : ");
+
+        for(int n : whitepoint){
+            System.out.print(n  + " ");
+        }
+        System.out.println("");
+
+        for (int x = 0; x < srcIndexer.size(0); x++) {
+            for (int y = 0; y < srcIndexer.size(1); y++) {
+                int[] values = new int[3];
+                srcIndexer.get(x, y, values);
+                if(values[0] < blackPoint[0] && values[1] < blackPoint[1] && values[2] < blackPoint[2]){
+                    blackPoint[0] = values[0];
+                    blackPoint[1] = values[1];
+                    blackPoint[2] = values[2];
+                }
+                if(values[0] > whitepoint[0] && values[1] > whitepoint[1] && values[2] > whitepoint[2]){
+                    whitepoint[0] = values[0];
+                    whitepoint[1] = values[1];
+                    whitepoint[2] = values[2];
+                }
+            }
+        }
+        System.out.print("\nNew BlackPoint : ");
+
+        for(int n : blackPoint){
+            System.out.print(n  + " ");
+        }
+        System.out.println("");
+        System.out.print("\nNew WhitePoint : ");
+
+        for(int n : whitepoint){
+            System.out.print(n  + " ");
+        }
+        System.out.println("");
+
+        Mat o = new Mat();
+        opencv_imgproc.cvtColor(i, i, opencv_imgproc.COLOR_BGR2HSV);
+
+        UByteIndexer oIndexer = i.createIndexer();
+        for (int x = 0; x < oIndexer.size(0); x++) {
+            for (int y = 0; y < oIndexer.size(1); y++) {
+                int[] values = new int[3];
+                oIndexer.get(x, y, values);
+                values[2] += (int) (values[2] * -.3);
+                oIndexer.put(x,y, values);
+            }
+        }
+        opencv_imgproc.cvtColor(i, i, opencv_imgproc.COLOR_HSV2BGR);
+
+
+        return i;
+    }
+
+    static Mat changeBrightness(Mat i, double n){
+        opencv_imgproc.cvtColor(i, i, opencv_imgproc.COLOR_BGR2HSV);
+        UByteIndexer indexer = i.createIndexer();
+        for (int x = 0; x < indexer.size(0); x++) {
+            for (int y = 0; y < indexer.size(1); y++) {
+                int[] values = new int[3];
+                indexer.get(x,y,values);
+                values[2] += (int) (values[2] * n);
+                values[2] = Math.clamp(values[2], 0, 255);
+                indexer.put(x,y, values);
+            }
+        }
+        
+        opencv_imgproc.cvtColor(i, i, opencv_imgproc.COLOR_HSV2BGR);
+        return i;
+    }
+    static Mat invert(Mat i){
+        WhiteBalancer wb = new WhiteBalancer(opencv_xphoto.createSimpleWB());
+        wb.balanceWhite(i ,i);
+        opencv_core.bitwise_not(i , i);
+
+        return i;
     }
 
 }
