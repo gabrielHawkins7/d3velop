@@ -116,11 +116,9 @@ public class Dc {
         ogImage = new File(url);
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
-            // Load the image
-            curMat = opencv_imgcodecs.imread(url);
-            // Update the UI on the JavaFX Application Thread
+            curMat = opencv_imgcodecs.imread(url , opencv_imgcodecs.IMREAD_UNCHANGED);
+            System.out.println(curMat.type());
             Platform.runLater(() -> {
-                // Display the loaded image in the ImageView
                 imgview.setImage(ImageTransformer.toFXImage(curMat));
             });
         });
@@ -159,38 +157,28 @@ public class Dc {
     }
     @FXML
     void rotateRight(){
-        if(outMat != null){
-            opencv_core.rotate(outMat, outMat, opencv_core.ROTATE_90_CLOCKWISE);
-            imgview.setImage(ImageTransformer.toFXImage(outMat));
-        }else if(curMat != null){
+        if(curMat != null){
             opencv_core.rotate(curMat, curMat, opencv_core.ROTATE_90_CLOCKWISE);
             imgview.setImage(ImageTransformer.toFXImage(curMat));
-        }else{
-            return;
         }
     }
     @FXML
     void rotateLeft(){
-        if(outMat != null){
-            opencv_core.rotate(outMat, outMat, opencv_core.ROTATE_90_COUNTERCLOCKWISE);
-            imgview.setImage(ImageTransformer.toFXImage(outMat));
-        }else if(curMat != null){
+        if(curMat != null){
             opencv_core.rotate(curMat, curMat, opencv_core.ROTATE_90_COUNTERCLOCKWISE);
             imgview.setImage(ImageTransformer.toFXImage(curMat));
-        }else{
-            return;
         }
     }
     @FXML
     void invert(){
         // // curMat = ColorTransformer.balanceWhite(curMat);
-        // WhiteBalancer wb = new WhiteBalancer(opencv_xphoto.createSimpleWB());
-        // wb.balanceWhite(curMat, curMat);
-        // opencv_core.bitwise_not(curMat, curMat);
-        // imgview.setImage(ImageTransformer.toFXImage(curMat));
-        curMat.convertTo(outMat, -1);
-        outMat = ColorTransformer.invert(outMat);
-        imgview.setImage(ImageTransformer.toFXImage(outMat));
+        // curMat.convertTo(curMat, -1, .2 ,0);
+        WhiteBalancer wb = new WhiteBalancer(opencv_xphoto.createSimpleWB());
+        wb.balanceWhite(curMat, curMat);
+        opencv_core.bitwise_not(curMat, curMat);
+        // curMat = ColorTransformer.invert(curMat);
+
+        imgview.setImage(ImageTransformer.toFXImage(curMat));
     }
 
     void changeBrightness(double b){

@@ -1,12 +1,21 @@
 package com.d3dev;
 
 
+import java.util.Arrays;
+
+import org.bytedeco.javacpp.DoublePointer;
+import org.bytedeco.javacpp.indexer.DoubleIndexer;
+import org.bytedeco.javacpp.indexer.ShortIndexer;
 import org.bytedeco.javacpp.indexer.UByteIndexer;
 import org.bytedeco.opencv.global.opencv_core;
+import org.bytedeco.opencv.global.opencv_imgcodecs;
 import org.bytedeco.opencv.global.opencv_imgproc;
 import org.bytedeco.opencv.global.opencv_xphoto;
+import org.bytedeco.opencv.opencv_core.Buffer;
+import org.bytedeco.opencv.opencv_core.IplImage;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.MatVector;
+import org.bytedeco.opencv.opencv_core.Scalar;
 import org.bytedeco.opencv.opencv_imgproc.CLAHE;
 import org.bytedeco.opencv.opencv_xphoto.WhiteBalancer;
 
@@ -200,9 +209,8 @@ public class ColorTransformer {
     }
     static Mat invert(Mat i){
         WhiteBalancer wb = new WhiteBalancer(opencv_xphoto.createSimpleWB());
-        wb.balanceWhite(i ,i);
-        opencv_core.bitwise_not(i , i);
-
+        wb.balanceWhite(i, i);
+        opencv_core.bitwise_not(i, i);
         return i;
     }
 
