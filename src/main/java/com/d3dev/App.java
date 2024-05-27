@@ -35,7 +35,7 @@ public class App extends Application {
         Controller controller = new Controller(stage,scene);
 
         root.getChildren().add(controller.getRoot());
-
+        VBox.setVgrow(controller.getRoot(), Priority.ALWAYS);
 
         stage.setScene(scene);
         stage.show();

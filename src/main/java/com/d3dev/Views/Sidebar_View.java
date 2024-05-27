@@ -6,6 +6,9 @@ import com.d3dev.Controller;
 import com.d3dev.Model;
 
 import atlantafx.base.theme.Styles;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -22,16 +25,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class Sidebar_View extends VBox{
-    public HashMap<String, Node> controls = new HashMap<>();
-    public String workspace_profile;
-    public String outspace_profile;
-    Model model;
+    StringProperty work_profile = new SimpleStringProperty();
+    StringProperty out_profile = new SimpleStringProperty();
 
+    Model model;
     public Sidebar_View(Model model){
        this.model = model;
-
-        
-
+       model.props_.put("work_profile", work_profile);
+       model.props_.put("out_profile", out_profile);
         HBox row = new HBox();
         row.setAlignment(Pos.CENTER);
         this.getChildren().add(row);
@@ -52,11 +53,6 @@ public class Sidebar_View extends VBox{
         createDevelopTab(develop_tab);
         createEditTab(edit_tab);
 
-
-        
-
-
-
     }
 
     void createDevelopTab(Tab dev_tab){
@@ -69,40 +65,31 @@ public class Sidebar_View extends VBox{
 
         Text workspace_label = new Text("Working Colorspace");
         ComboBox<String> workspace_combobox = new ComboBox<>();
-        controls.put("workspace_combobox", workspace_combobox);
-        workspace_combobox.getItems().addAll(controller_ref.profiles.keySet());
-        workspace_combobox.getSelectionModel().selectFirst();
+        model.ui_.put("workspace_combobox", workspace_combobox);
+        workspace_combobox.getItems().addAll(model.csprofiles_.keySet());
         workspace_combobox.getStyleClass().addAll(Styles.DENSE);
         workspace_combobox.setPrefWidth(width);
         box1.add(workspace_label, 0, 0); 
         box1.add(workspace_combobox,3,0);
-        workspace_profile = controller_ref.profiles.get(workspace_combobox.getValue());
-        workspace_combobox.valueProperty().addListener(e->{
-            workspace_profile = controller_ref.profiles.get(workspace_combobox.getValue());
-        });
+        workspace_combobox.valueProperty().bindBidirectional(work_profile);
+        workspace_combobox.getSelectionModel().select(0);
 
 
         Text outspace_label = new Text("Output Colorspace");
         ComboBox<String> outspace_combobox = new ComboBox<>();
-        controls.put("outspace_combobox", outspace_combobox);
-        outspace_combobox.getItems().addAll(controller_ref.profiles.keySet());
-        outspace_combobox.getSelectionModel().selectFirst();
+        model.ui_.put("outspace_combobox", outspace_combobox);
+        outspace_combobox.getItems().addAll(model.csprofiles_.keySet());
         outspace_combobox.getStyleClass().addAll(Styles.DENSE);
         outspace_combobox.setPrefWidth(width);
         box1.add(outspace_label, 0, 1); 
         box1.add(outspace_combobox,3,1);
-
-        outspace_profile = controller_ref.profiles.get(outspace_combobox.getValue());
-
-        outspace_combobox.valueProperty().addListener(e->{
-            outspace_profile = controller_ref.profiles.get(outspace_combobox.getValue());
-
-        });
+        outspace_combobox.valueProperty().bindBidirectional(out_profile);
+        outspace_combobox.getSelectionModel().select(1);
 
         
 
         Button dev = new Button("Develop");
-        controls.put("dev_button", dev);
+        model.ui_.put("dev_button", dev);
         col.getChildren().add(dev);
 
 
@@ -116,7 +103,7 @@ public class Sidebar_View extends VBox{
         col.getChildren().add(box1);
 
         Slider brightness_slider = new Slider(-100, 100, 0);
-        controls.put("brightness_slider",brightness_slider);
+        model.ui_.put("brightness_slider",brightness_slider);
         brightness_slider.setShowTickLabels(true);
         brightness_slider.setShowTickMarks(true);
         brightness_slider.setStyle(Styles.SMALL);
