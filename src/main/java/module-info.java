@@ -3,11 +3,9 @@ module com.d3dev {
     requires javafx.fxml;
     requires atlantafx.base;
     requires java.desktop;
-    
-    requires org.bytedeco.javacv;
-    requires org.bytedeco.opencv;
-    requires org.bytedeco.javacpp;
+    requires javafx.graphics;
+    requires org.kordamp.ikonli.feather;
+    requires org.kordamp.ikonli.javafx;
 
-    opens com.d3dev to javafx.fxml;
     exports com.d3dev;
 }

@@ -2,12 +2,16 @@ package com.d3dev;
 
 import java.io.IOException;
 
+import com.d3dev.Views.Main_Window;
+
 import atlantafx.base.theme.Dracula;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -21,35 +25,21 @@ public class App extends Application {
     
 
     @Override
-    public void start(Stage stage) throws IOException {
-        //Loader.load(opencv_java.class);
+   public void start(Stage stage) throws IOException, InterruptedException {
+
 
         Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("primary.fxml"));
-        scene = new Scene(loader.load(), 640, 480);
-        Dc dc = loader.getController();
-        dc.initialize();
+        VBox root = new VBox();
+        scene = new Scene(root, 800, 600);
         
-        //dc.loadImage("src/main/resources/com/d3dev/02_02_400d_ 23.png");
+        Controller controller = new Controller(stage,scene);
+
+        root.getChildren().add(controller.getRoot());
+
 
         stage.setScene(scene);
         stage.show();
-
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @SuppressWarnings("incomplete-switch")
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case EQUALS:    dc.imgview.setFitWidth(dc.imgview.getFitWidth() + 20); break;
-                    case MINUS:    dc.imgview.setFitWidth(dc.imgview.getFitWidth() - 20); break;
-                }
-            }
-        });
-
-        System.out.println();
-        
-
-
+        stage.setTitle("D3velop");
     }
     public static void main(String[] args) {
         launch();
