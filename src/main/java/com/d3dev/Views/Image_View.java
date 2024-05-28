@@ -7,7 +7,9 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Task;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,6 +19,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.awt.image.BufferedImage;
 
+import com.d3dev.Model;
 import com.d3dev.Utils.SwingFXUtils;
 
 
@@ -27,13 +30,13 @@ public class Image_View extends ScrollPane{
     final int ZOOMFACTOR = 10;
     public double IMAGE_RATIO;
     Rectangle viewPort = new Rectangle();
-    Scene scene_ref;
+    Model model;
 
-
-    public Image_View(Scene scene_ref){
-        this.scene_ref = scene_ref;
+    public Image_View(Model model){
+        this.model = model;
         image_view.setPreserveRatio(true);     
         content_pane.getChildren().add(image_view);
+        content_pane.setAlignment(Pos.CENTER);
 
         this.setContent(content_pane);
         this.setPannable(false);
@@ -72,7 +75,7 @@ public class Image_View extends ScrollPane{
             Image i = SwingFXUtils.toFXImage(img, null);
             Platform.runLater(()->{
                 loadImage(i);
-
+                model.props_.get("loading_").setValue(false);;
             });
         }).start();;
     } 

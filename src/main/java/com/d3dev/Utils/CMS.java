@@ -23,9 +23,9 @@ public class CMS {
 
     public static HashMap<String, String> getProfiles(){
         HashMap<String, String> profiles = new HashMap<>();
-        profiles.put("ProPhoto LAB*", "src/main/resources/com/controlstest/ICC_Profiles/LargeRGB-elle-V4-labl.icc");
-        profiles.put("ProPhoto g1.8", "src/main/resources/com/controlstest/ICC_Profiles/LargeRGB-elle-V2-g18.icc");
-        profiles.put("SRGB g2.2", "src/main/resources/com/controlstest/ICC_Profiles/sRGB-elle-V4-srgbtrc.icc");
+        profiles.put("ProPhoto LAB*", "src/main/resources/com/d3dev/ICC_PROFILES/LargeRGB-elle-V4-labl.icc");
+        profiles.put("ProPhoto g1.8", "src/main/resources/com/d3dev/ICC_PROFILES/LargeRGB-elle-V2-g18.icc");
+        profiles.put("SRGB g2.2",  "src/main/resources/com/d3dev/ICC_PROFILES/sRGB-elle-V4-srgbtrc.icc");
         return profiles;
     }
 

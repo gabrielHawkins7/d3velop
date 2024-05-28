@@ -7,6 +7,8 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import com.d3dev.Model;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -17,8 +19,7 @@ import javafx.scene.text.Text;
 public class Toolbar_View{
     public ToolBar root;
     public HashMap<String, Node> controls = new HashMap<>();
-    public String selectedViewport = "Output";
-
+    public StringProperty viewport_cs = new SimpleStringProperty();
 
     public Toolbar_View(Model model){
         Button openfile_button = new Button("Open", new FontIcon(Feather.FILE));
@@ -28,11 +29,8 @@ public class Toolbar_View{
 
         ComboBox<String> viewportCombobox = new ComboBox<>();
         viewportCombobox.getItems().addAll("Output", "Working");
+        viewportCombobox.valueProperty().bindBidirectional(viewport_cs);
         viewportCombobox.getSelectionModel().selectFirst();
-        viewportCombobox.valueProperty().addListener(e->{
-            selectedViewport = viewportCombobox.getValue();
-            
-        });
 
         
 
@@ -43,5 +41,7 @@ public class Toolbar_View{
         model.ui_.put("undo_button", undo_button);
         model.ui_.put("viewport_combobox", viewportCombobox);
         model.ui_.put("crop_button", crop_button);
+
+        model.props_.put("viewport_cs", viewport_cs);
     }
 }

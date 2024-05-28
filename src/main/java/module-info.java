@@ -6,6 +6,7 @@ module com.d3dev {
     requires javafx.graphics;
     requires org.kordamp.ikonli.feather;
     requires org.kordamp.ikonli.javafx;
+    requires javafx.base;
 
     exports com.d3dev;
 }

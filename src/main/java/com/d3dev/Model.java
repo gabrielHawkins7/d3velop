@@ -27,8 +27,9 @@ public class Model {
         //Views
         Main_Window root = new Main_Window(this);
         Toolbar_View toolbar_View = new Toolbar_View(this);
-        Image_View image_View = new Image_View(scene_ref);
+        Image_View image_View = new Image_View(this);
         Sidebar_View sidebar_View = new Sidebar_View(this);
 
+        
 
 }

@@ -6,6 +6,7 @@ import com.d3dev.Views.Main_Window;
 
 import atlantafx.base.theme.Dracula;
 import javafx.application.Application;
+import javafx.beans.property.Property;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -40,6 +41,10 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
         stage.setTitle("D3velop");
+
+        for(Property x : controller.model.props_.values()){
+            System.out.println(x.getValue());
+        }
     }
     public static void main(String[] args) {
         launch();
