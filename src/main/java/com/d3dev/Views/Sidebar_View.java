@@ -30,9 +30,9 @@ public class Sidebar_View extends VBox{
 
     Model model;
     public Sidebar_View(Model model){
-       this.model = model;
-       model.props_.put("work_profile", work_profile);
-       model.props_.put("out_profile", out_profile);
+        this.model = model;
+        model.props_.put("work_profile", work_profile);
+        model.props_.put("out_profile", out_profile);
         HBox row = new HBox();
         row.setAlignment(Pos.CENTER);
         this.getChildren().add(row);

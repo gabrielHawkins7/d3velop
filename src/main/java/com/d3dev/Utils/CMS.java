@@ -13,25 +13,34 @@ import java.awt.image.DataBufferUShort;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
+
+import com.d3dev.App;
 
 
 public class CMS {
 
-    public static HashMap<String, String> getProfiles(){
-        HashMap<String, String> profiles = new HashMap<>();
-        profiles.put("ProPhoto LAB*", "src/main/resources/com/d3dev/ICC_PROFILES/LargeRGB-elle-V4-labl.icc");
-        profiles.put("ProPhoto g1.8", "src/main/resources/com/d3dev/ICC_PROFILES/LargeRGB-elle-V2-g18.icc");
-        profiles.put("SRGB g2.2",  "src/main/resources/com/d3dev/ICC_PROFILES/sRGB-elle-V4-srgbtrc.icc");
+    public static HashMap<String, ColorSpace> getProfiles(){
+        HashMap<String, ColorSpace> profiles = new HashMap<>();
+        File icc_directory = new File("src/main/resources/com/d3dev/ICC_PROFILES");
+        for(File x : icc_directory.listFiles()){
+            try {
+                profiles.put(x.getName().substring(0, x.getName().length() - 4), new ICC_ColorSpace(ICC_Profile.getInstance(x.getPath())));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
         return profiles;
     }
 
     public static BufferedImage convert_space(BufferedImage image, String profile) throws IOException{
         ColorSpace cs = new ICC_ColorSpace(ICC_Profile.getInstance(profile));
-
         if(image.getColorModel().getPixelSize() == 48){
             ComponentColorModel cm = new ComponentColorModel(cs, new int[] {16, 16, 16},false, false, Transparency.OPAQUE,DataBuffer.TYPE_USHORT);
             return new BufferedImage(cm, image.getRaster(), cm.isAlphaPremultiplied(), null);
@@ -42,9 +51,18 @@ public class CMS {
             ColorConvertOp cco = new ColorConvertOp(cs,null);
             return cco.filter(image, null);
         }
-
-
-        
+    }
+    public static BufferedImage convert_space(BufferedImage image, ColorSpace cs) throws IOException{
+        if(image.getColorModel().getPixelSize() == 48){
+            ComponentColorModel cm = new ComponentColorModel(cs, new int[] {16, 16, 16},false, false, Transparency.OPAQUE,DataBuffer.TYPE_USHORT);
+            return new BufferedImage(cm, image.getRaster(), cm.isAlphaPremultiplied(), null);
+        }else if(image.getColorModel().getPixelSize() == 64){
+            ComponentColorModel cm = new ComponentColorModel(cs, new int[] {16, 16, 16,16},true, false, Transparency.OPAQUE,DataBuffer.TYPE_USHORT);
+            return new BufferedImage(cm, image.getRaster(), cm.isAlphaPremultiplied(), null);
+        }else {
+            ColorConvertOp cco = new ColorConvertOp(cs,null);
+            return cco.filter(image, null);
+        }
     }
     
     static BufferedImage equalizeHist16bit(BufferedImage image){
@@ -89,6 +107,9 @@ public class CMS {
                 image.getRaster().setPixel(x, y, newPixel);
             }   
         }
+        histR = null;
+        histG = null;
+        histB = null;
         return image;
     }
 
@@ -107,6 +128,7 @@ public class CMS {
     }
 
     public static BufferedImage convertTo16Bit(BufferedImage image){
+        
         ColorSpace cs = image.getColorModel().getColorSpace();
         ComponentColorModel cm = new ComponentColorModel(cs, false, false, BufferedImage.OPAQUE, DataBuffer.TYPE_USHORT);
         WritableRaster wr = Raster.createInterleavedRaster(DataBuffer.TYPE_USHORT, image.getWidth(), image.getHeight(), image.getWidth() * 3,3,new int[]{0,1,2}, null);
@@ -128,6 +150,7 @@ public class CMS {
                 
             }
         }
+
         return out;
     }
 }

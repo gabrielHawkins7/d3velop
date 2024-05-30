@@ -10,6 +10,7 @@
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
     <dependencies>
+
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
@@ -57,7 +58,11 @@
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
+                            <launcher>d3velop</launcher>
                             <mainClass>com.d3dev.App</mainClass>
+                            <options>
+                                <option>-agentpath:/Applications/VisualVM.app/Contents/Resources/visualvm/visualvm/lib/deployed/jdk16/mac/libprofilerinterface.jnilib=/Applications/VisualVM.app/Contents/Resources/visualvm/visualvm/lib,5140</option>
+                            </options>
                         </configuration>
                     </execution>
                 </executions>

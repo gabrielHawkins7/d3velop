@@ -7,6 +7,9 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import com.d3dev.Model;
 
+import atlantafx.base.controls.ToggleSwitch;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
@@ -20,6 +23,7 @@ public class Toolbar_View{
     public ToolBar root;
     public HashMap<String, Node> controls = new HashMap<>();
     public StringProperty viewport_cs = new SimpleStringProperty();
+    public BooleanProperty colormgmt = new SimpleBooleanProperty(true);
 
     public Toolbar_View(Model model){
         Button openfile_button = new Button("Open", new FontIcon(Feather.FILE));
@@ -32,16 +36,27 @@ public class Toolbar_View{
         viewportCombobox.valueProperty().bindBidirectional(viewport_cs);
         viewportCombobox.getSelectionModel().selectFirst();
 
-        
+        ToggleSwitch colormgmt_switch = new ToggleSwitch("Color Management");
+        colormgmt_switch.setSelected(true);
+        colormgmt.bindBidirectional(colormgmt_switch.selectedProperty());
 
-        root = new ToolBar(openfile_button, savefile_button,undo_button, new Text("Viewport Colorspace"), viewportCombobox, crop_button);
+
+
+        root = new ToolBar( openfile_button, 
+                            savefile_button,undo_button, 
+                            new Text("Viewport Colorspace"), 
+                            viewportCombobox, 
+                            crop_button,
+                            colormgmt_switch);
         
         model.ui_.put("openfile_button", openfile_button);
         model.ui_.put("savefile_button", savefile_button);
         model.ui_.put("undo_button", undo_button);
         model.ui_.put("viewport_combobox", viewportCombobox);
         model.ui_.put("crop_button", crop_button);
+        model.ui_.put("colormgmt_switch", colormgmt_switch);
 
         model.props_.put("viewport_cs", viewport_cs);
+        model.props_.put("colormgmt", colormgmt);
     }
 }

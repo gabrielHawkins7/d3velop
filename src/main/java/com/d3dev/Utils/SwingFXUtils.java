@@ -35,6 +35,7 @@ import java.nio.IntBuffer;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelBuffer;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;

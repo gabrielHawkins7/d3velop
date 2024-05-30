@@ -1,0 +1,2 @@
+JAVA_VERSION="21.0.2"
+MODULES="java.base java.datatransfer java.xml java.prefs java.desktop javafx.base jdk.unsupported javafx.graphics javafx.controls atlantafx.base java.logging java.scripting javafx.fxml org.kordamp.ikonli.core org.kordamp.ikonli.feather org.kordamp.ikonli.javafx com.d3dev"

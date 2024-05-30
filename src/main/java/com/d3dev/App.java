@@ -1,16 +1,13 @@
 package com.d3dev;
 
 import java.io.IOException;
-
-import com.d3dev.Views.Main_Window;
-
+import java.util.Timer;
+import java.util.TimerTask;
 import atlantafx.base.theme.Dracula;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.Property;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -20,7 +17,6 @@ import javafx.stage.Stage;
  */
 @SuppressWarnings("exports") 
 public class App extends Application {
-
     private static Scene scene;
 
     
@@ -28,8 +24,9 @@ public class App extends Application {
     @Override
    public void start(Stage stage) throws IOException, InterruptedException {
 
-
         Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
+        
+
         VBox root = new VBox();
         scene = new Scene(root, 800, 600);
         
@@ -42,9 +39,35 @@ public class App extends Application {
         stage.show();
         stage.setTitle("D3velop");
 
-        for(Property x : controller.model.props_.values()){
-            System.out.println(x.getValue());
+       
+
+        
+        for(String x : controller.model.props_.keySet()){
+            System.out.println(x + " : " + controller.model.props_.get(x).getValue());
         }
+        for(Property x : controller.model.props_.values()){
+            x.addListener(e->{
+                for(String k : controller.model.props_.keySet()){
+                    if(x.equals(controller.model.props_.get(k))){
+                        System.out.println(k + " : " + x);
+                    }
+                }
+            });
+        }
+        
+
+        stage.setOnCloseRequest(e->{
+            Platform.exit();
+            System.exit(0);
+        });
+
+        // new Timer().schedule(
+        //     new TimerTask() {
+        //         @Override
+        //         public void run() {
+        //             System.gc();
+        //         }
+        //     },5000, 5000);
     }
     public static void main(String[] args) {
         launch();

@@ -1,2 +1,13 @@
-module-info.class
 com/d3dev/App.class
+com/d3dev/Views/Image_View.class
+com/d3dev/Views/Sidebar_View.class
+module-info.class
+com/d3dev/Controller$2.class
+com/d3dev/Utils/SwingFXUtils.class
+com/d3dev/Utils/CMS.class
+com/d3dev/Views/Toolbar_View.class
+com/d3dev/Model.class
+com/d3dev/Utils/SwingFXUtils$1.class
+com/d3dev/View_Controller.class
+com/d3dev/Views/Main_Window.class
+com/d3dev/Controller.class

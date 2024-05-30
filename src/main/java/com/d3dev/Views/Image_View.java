@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.awt.image.BufferedImage;
+import java.util.logging.Logger;
 
 import com.d3dev.Model;
 import com.d3dev.Utils.SwingFXUtils;
@@ -71,13 +72,8 @@ public class Image_View extends ScrollPane{
         
     }   
     public void loadImage(BufferedImage img){ 
-        new Thread(()->{
             Image i = SwingFXUtils.toFXImage(img, null);
-            Platform.runLater(()->{
-                loadImage(i);
-                model.props_.get("loading_").setValue(false);;
-            });
-        }).start();;
+            loadImage(i);
     } 
 
     public void zoomIn(){
