@@ -33,9 +33,7 @@ import java.awt.image.SampleModel;
 import java.awt.image.SinglePixelPackedSampleModel;
 import java.nio.IntBuffer;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelBuffer;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -246,6 +244,7 @@ public class SwingFXUtils {
      *         {@code Image}, or null if the {@code Image} is not readable.
      * @since JavaFX 2.2
      */
+    @SuppressWarnings("incomplete-switch")
     public static BufferedImage fromFXImage(Image img, BufferedImage bimg) {
         PixelReader pr = img.getPixelReader();
         if (pr == null) {

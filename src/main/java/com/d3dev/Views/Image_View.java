@@ -1,27 +1,18 @@
 package com.d3dev.Views;
 
-import atlantafx.base.controls.RingProgressIndicator;
-import javafx.application.Platform;
+import java.awt.image.BufferedImage;
+
+import com.d3dev.Model;
+import com.d3dev.Utils.SwingFXUtils;
+
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.concurrent.Task;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
-import java.awt.image.BufferedImage;
-import java.util.logging.Logger;
-
-import com.d3dev.Model;
-import com.d3dev.Utils.SwingFXUtils;
 
 
 public class Image_View extends ScrollPane{

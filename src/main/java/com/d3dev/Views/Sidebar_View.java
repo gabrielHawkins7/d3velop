@@ -1,17 +1,9 @@
 package com.d3dev.Views;
 
-import java.util.HashMap;
-
-import com.d3dev.Controller;
 import com.d3dev.Model;
 
 import atlantafx.base.theme.Styles;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
@@ -25,18 +17,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class Sidebar_View extends VBox{
-    StringProperty work_profile = new SimpleStringProperty();
-    StringProperty out_profile = new SimpleStringProperty();
 
     Model model;
     public Sidebar_View(Model model){
         this.model = model;
-        model.props_.put("work_profile", work_profile);
-        model.props_.put("out_profile", out_profile);
         HBox row = new HBox();
         row.setAlignment(Pos.CENTER);
         this.getChildren().add(row);
-        this.setVgrow(row, Priority.ALWAYS);
+        VBox.setVgrow(row, Priority.ALWAYS);
 
 
 
@@ -48,7 +36,7 @@ public class Sidebar_View extends VBox{
         tabs.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         tabs.setMinWidth(200);
         row.getChildren().add(tabs);
-        row.setHgrow(tabs, Priority.ALWAYS);
+        HBox.setHgrow(tabs, Priority.ALWAYS);
 
         createDevelopTab(develop_tab);
         createEditTab(edit_tab);
@@ -57,7 +45,6 @@ public class Sidebar_View extends VBox{
 
     void createDevelopTab(Tab dev_tab){
         VBox col = new VBox();
-        HBox row = new HBox();
         dev_tab.setContent(col);
         int width = 200;
         GridPane box1 = new GridPane(10, 5);
@@ -71,8 +58,8 @@ public class Sidebar_View extends VBox{
         workspace_combobox.setPrefWidth(width);
         box1.add(workspace_label, 0, 0); 
         box1.add(workspace_combobox,3,0);
-        workspace_combobox.valueProperty().bindBidirectional(work_profile);
         workspace_combobox.getSelectionModel().select(0);
+
 
 
         Text outspace_label = new Text("Output Colorspace");
@@ -83,8 +70,8 @@ public class Sidebar_View extends VBox{
         outspace_combobox.setPrefWidth(width);
         box1.add(outspace_label, 0, 1); 
         box1.add(outspace_combobox,3,1);
-        outspace_combobox.valueProperty().bindBidirectional(out_profile);
         outspace_combobox.getSelectionModel().select(1);
+
 
         
 
@@ -96,9 +83,7 @@ public class Sidebar_View extends VBox{
     }
     void createEditTab(Tab edit_tab){
         VBox col = new VBox();
-        HBox row = new HBox();
         edit_tab.setContent(col);
-        int width = 200;
         GridPane box1 = new GridPane(10, 5);
         col.getChildren().add(box1);
 

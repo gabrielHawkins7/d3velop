@@ -1,7 +1,7 @@
 package com.d3dev;
 
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
 
@@ -12,11 +12,11 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import com.d3dev.Utils.CMS;
 import com.d3dev.Utils.Developer;
 import com.d3dev.Utils.img_transformer;
+import com.twelvemonkeys.image.ImageUtil;
 
 import atlantafx.base.controls.Notification;
 import atlantafx.base.theme.Styles;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -24,16 +24,20 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+
 public class Controller {
-    static final Model model = new Model();
+    App app_ref;
+    public Model model = new Model();
     View_Controller view_controller;
 
     Notification warn;
     Notification message;
 
-    Controller(Stage stage_ref, Scene scene_ref){
+    @SuppressWarnings("unused")
+    Controller(Stage stage_ref, Scene scene_ref, App app_ref){
         model.stage_ref = stage_ref;
         model.scene_ref = scene_ref;
+        this.app_ref = app_ref;
         img_transformer img_ = new img_transformer(model,this);
 
         view_controller = new View_Controller(model, this);
@@ -53,18 +57,19 @@ public class Controller {
         }
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TIFF or PNG", "*.tiff","*.png"));
-        model.open_file = fc.showOpenDialog(model.stage_ref);
-        if(model.open_file != null){
+        File open_file = fc.showOpenDialog(model.stage_ref);
+        model.open_file = open_file;
+        if(open_file != null){
                try {
-                model.open_image = ImageIO.read(model.open_file);
+                model.open_image = ImageIO.read(open_file);
                 model.open_image = CMS.convertTo16Bit(model.open_image);
-                model.original_cs = model.open_image.getColorModel().getColorSpace();
-                model.current_cs.set(model.original_cs);
+                model.props_.original_cs.set(model.open_image.getColorModel().getColorSpace());
                 update_cs();
-                loadImage(model.open_image);
+                Platform.runLater(()->{
+                    loadImage(model.open_image);
+                });
             } catch (IOException e) {
                 throw_warning("Unable to Open File : " + e.getMessage());
-                
             }
         }
     }
@@ -85,33 +90,44 @@ public class Controller {
     }
 
     void update_cs(){
-        if(model.open_file != null && (Boolean) model.props_.get("colormgmt").getValue() == true){
+        if(model.open_image != null && (Boolean) model.props_.color_mgmt.getValue() == true){
             model.image_View.image_view.setImage(null);
             try {
-                if((String) model.props_.get("viewport_cs").getValue() == "Working"){
-                    model.open_image = CMS.convert_space(model.open_image,  model.csprofiles_.get(model.props_.get("work_profile").getValue()));
-                    model.current_cs.set(model.open_image.getColorModel().getColorSpace());
+                if(model.props_.viewport_cs.getValue().equals("Working")){
+                    model.open_image = CMS.convert_space(model.open_image, model.csprofiles_.get(model.props_.work_cs.getValue()));
                 }else{
-                    model.open_image = CMS.convert_space(model.open_image,model.csprofiles_.get(model.props_.get("out_profile").getValue()));
-                    model.current_cs.set(model.open_image.getColorModel().getColorSpace());
-
+                    model.open_image = CMS.convert_space(model.open_image, model.csprofiles_.get(model.props_.out_cs.getValue()));
                 }
-                } catch (IOException e) {
-                    throw_warning("Unable Update Color Space  : " + e.getMessage());
+
+            } catch (IOException e) {
+                throw_warning("Unable Update Color Space  : " + e.getMessage());
             }
+
         }
+        
     }
 
     void reset_cs(){
-        if(model.open_file != null){
+        if(model.open_image != null){
             try {
-                model.open_image = CMS.convert_space(model.open_image, model.original_cs);
-                model.current_cs.set(model.original_cs);
+                model.open_image = CMS.convert_space(model.open_image, (ColorSpace) model.props_.original_cs.getValue());
             } catch (IOException e) {
                 throw_warning("Unable Update Color Space  : " + e.getMessage());
             }
             
         }
+    }
+    void reset_image(){
+        if(model.open_file != null){
+            try {
+             model.open_image = ImageIO.read(model.open_file);
+             model.open_image = CMS.convertTo16Bit(model.open_image);
+             update_cs();
+             upadteImage();
+         } catch (IOException e) {
+             throw_warning("Unable to Open File : " + e.getMessage());
+         }
+     }
     }
     VBox getRoot(){
         return model.root;
@@ -137,7 +153,7 @@ public class Controller {
     public void develop(){
         if(model.open_image != null){
             try {
-                model.open_image = CMS.convert_space(model.open_image,model.csprofiles_.get(model.props_.get("work_profile").getValue()));
+                model.open_image = CMS.convert_space(model.open_image,model.csprofiles_.get(model.props_.work_cs.getValue()));
             } catch (IOException e) {
                 throw_warning("Unable Update Color Space  : " + e.getMessage());
             }

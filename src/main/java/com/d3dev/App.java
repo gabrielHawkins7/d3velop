@@ -1,8 +1,8 @@
 package com.d3dev;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Stack;
+
 import atlantafx.base.theme.Dracula;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -15,10 +15,9 @@ import javafx.stage.Stage;
 /**
  * JavaFX App
  */
-@SuppressWarnings("exports") 
 public class App extends Application {
     private static Scene scene;
-
+    Controller controller;
     
 
     @Override
@@ -26,11 +25,10 @@ public class App extends Application {
 
         Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
         
-
         VBox root = new VBox();
         scene = new Scene(root, 800, 600);
         
-        Controller controller = new Controller(stage,scene);
+        controller = new Controller(stage,scene, this);
 
         root.getChildren().add(controller.getRoot());
         VBox.setVgrow(controller.getRoot(), Priority.ALWAYS);
@@ -39,23 +37,18 @@ public class App extends Application {
         stage.show();
         stage.setTitle("D3velop");
 
-       
-
-        
-        for(String x : controller.model.props_.keySet()){
-            System.out.println(x + " : " + controller.model.props_.get(x).getValue());
+        for(String x : controller.model.props_.asList().keySet()){
+            System.out.println(x + " : " + controller.model.props_.asList().get(x).getValue());
         }
-        for(Property x : controller.model.props_.values()){
+        for(@SuppressWarnings("rawtypes") Property x : controller.model.props_.asList().values()){
             x.addListener(e->{
-                for(String k : controller.model.props_.keySet()){
-                    if(x.equals(controller.model.props_.get(k))){
-                        System.out.println(k + " : " + x);
+                for(String k : controller.model.props_.asList().keySet()){
+                    if(x.equals(controller.model.props_.asList().get(k))){
+                        System.out.println(k + " : " + x.getValue());
                     }
                 }
             });
         }
-        
-
         stage.setOnCloseRequest(e->{
             Platform.exit();
             System.exit(0);
@@ -69,6 +62,10 @@ public class App extends Application {
         //         }
         //     },5000, 5000);
     }
+
+    
+    
+
     public static void main(String[] args) {
         launch();
     }

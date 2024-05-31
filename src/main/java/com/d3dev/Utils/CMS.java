@@ -1,6 +1,5 @@
 package com.d3dev.Utils;
 
-import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.color.ColorSpace;
 import java.awt.color.ICC_ColorSpace;
@@ -9,18 +8,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
 import java.awt.image.ComponentColorModel;
 import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferUShort;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
-
-import com.d3dev.App;
 
 
 public class CMS {
@@ -32,7 +24,6 @@ public class CMS {
             try {
                 profiles.put(x.getName().substring(0, x.getName().length() - 4), new ICC_ColorSpace(ICC_Profile.getInstance(x.getPath())));
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

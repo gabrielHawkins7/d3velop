@@ -11,6 +11,7 @@ public class Main_Window extends VBox{
     public SplitPane splitpane;
     Model model;
 
+
     public Main_Window(Model model){
         this.model = model;
     }
@@ -18,9 +19,11 @@ public class Main_Window extends VBox{
     public void addPanels(Node left, Node right){
         splitpane = new SplitPane(left, right);
         splitpane.setDividerPositions(.62);
-        
         this.getChildren().add(splitpane);
         VBox.setVgrow(splitpane, Priority.ALWAYS);
+        
+
+
     }
 
 }

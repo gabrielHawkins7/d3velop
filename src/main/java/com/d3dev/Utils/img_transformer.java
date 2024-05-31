@@ -6,16 +6,10 @@ import com.d3dev.Controller;
 import com.d3dev.Model;
 import com.d3dev.Views.Image_View;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Bounds;
-import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 /**
  * img_transformer
@@ -23,7 +17,6 @@ import javafx.stage.Stage;
 public class img_transformer {
     
 
-    BooleanProperty crop_mode = new SimpleBooleanProperty(false);
     Rectangle crop_rectangle = new Rectangle();
     Model model_ref;
     Image_View imageview_ref;
@@ -32,8 +25,7 @@ public class img_transformer {
     public img_transformer(Model model_ref, Controller controller_ref){
         this.model_ref = model_ref;
         this.controller_ref =controller_ref;
-        this.imageview_ref = model_ref.image_View;
-        model_ref.props_.put("crop_mode", crop_mode);
+        this.imageview_ref = controller_ref.model.image_View;
 
         crop();
         crop_rectangle.setWidth(10);
@@ -59,8 +51,8 @@ public class img_transformer {
     double offsetY;
 
     void crop(){
-        crop_mode.addListener(e->{
-            if(crop_mode.getValue() == true){
+        model_ref.props_.crop_mode.addListener(e->{
+            if(model_ref.props_.crop_mode.getValue() == true && model_ref.open_image != null){
                 imageview_ref.content_pane.getChildren().add(crop_rectangle);
             }else{
                 imageview_ref.content_pane.getChildren().remove(crop_rectangle);
@@ -68,7 +60,7 @@ public class img_transformer {
         });
        
         imageview_ref.content_pane.setOnMousePressed(e->{
-            if(crop_mode.getValue() == true){
+            if(model_ref.props_.crop_mode.getValue() == true){
                 x = e.getX();
             y = e.getY();
             boundsLocal = imageview_ref.image_view.getBoundsInLocal();
@@ -97,7 +89,7 @@ public class img_transformer {
             }
         });
         imageview_ref.content_pane.setOnMouseDragged(e->{
-            if(crop_mode.getValue() == true){
+            if(model_ref.props_.crop_mode.getValue() == true){
                 crop_rectangle.setWidth(Math.abs(e.getX() - x));
                 crop_rectangle.setHeight(Math.abs(e.getY() - y));
                 crop_rectangle.setTranslateX(x - (imageview_ref.content_pane.getWidth() / 2) + (crop_rectangle.getWidth() / 2));
@@ -105,7 +97,7 @@ public class img_transformer {
             }
         });
         imageview_ref.content_pane.setOnMouseReleased(e->{
-            if(crop_mode.getValue() == true){
+            if(model_ref.props_.crop_mode.getValue() == true){
                 double w = crop_rectangle.localToScene(crop_rectangle.getBoundsInLocal()).getWidth();
                 double h = crop_rectangle.localToScene(crop_rectangle.getBoundsInLocal()).getHeight();
 
@@ -129,13 +121,29 @@ public class img_transformer {
 
                 if(imageW > imageview_ref.image_view.getImage().getWidth()){
                     imageW -= imageW - imageview_ref.image_view.getImage().getWidth();
+                    imageW -= imageX;
                 }
                 if(imageH > imageview_ref.image_view.getImage().getHeight()){
                     imageH -= imageH - imageview_ref.image_view.getImage().getHeight();
+                    imageH -= imageY;
                 }
 
-                model_ref.open_image = cropImage(model_ref.open_image, (int) imageX, (int) imageY, (int) imageW, (int) imageH);
+                try {
+                    model_ref.open_image = cropImage(model_ref.open_image, (int) imageX, (int) imageY, (int) imageW, (int) imageH);
+                } catch (Exception excelption) {
+                    controller_ref.throw_warning("Unable to Crop Image : " + excelption.getMessage()) ;
+                    System.out.println("Image x " + imageX + "Image y " + imageY);
+                    System.out.println("Image w " + imageW + " " + imageview_ref.image_view.getImage().getWidth());
+                }
                 controller_ref.upadteImage();
+                ToggleButton crop_button = (ToggleButton) model_ref.ui_.get("crop_button");
+                crop_button.setSelected(false);
+                model_ref.props_.crop_mode.set(false);
+                crop_rectangle.setWidth(10);
+                crop_rectangle.setHeight(10);
+                crop_rectangle.setTranslateX(0);
+                crop_rectangle.setTranslateY(0);
+
             }
         });
     }
