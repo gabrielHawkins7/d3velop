@@ -19,7 +19,7 @@ public class CMS {
 
     public static HashMap<String, ColorSpace> getProfiles(){
         HashMap<String, ColorSpace> profiles = new HashMap<>();
-        File icc_directory = new File("src/main/resources/com/d3dev/ICC_PROFILES");
+        File icc_directory = new File("/Contents/Resources/ICC_PROFILES");
         for(File x : icc_directory.listFiles()){
             try {
                 profiles.put(x.getName().substring(0, x.getName().length() - 4), new ICC_ColorSpace(ICC_Profile.getInstance(x.getPath())));
