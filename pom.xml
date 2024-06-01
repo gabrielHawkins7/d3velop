@@ -68,7 +68,6 @@
                             <launcher>d3velop</launcher>
                             <mainClass>com.d3dev.App</mainClass>
                             <options>
-                                <option>-agentpath:/Applications/VisualVM.app/Contents/Resources/visualvm/visualvm/lib/deployed/jdk16/mac/libprofilerinterface.jnilib=/Applications/VisualVM.app/Contents/Resources/visualvm/visualvm/lib,5140</option>
                             </options>
                         </configuration>
                     </execution>

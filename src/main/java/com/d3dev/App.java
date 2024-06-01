@@ -2,6 +2,8 @@ package com.d3dev;
 
 import java.io.IOException;
 import java.util.Stack;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import atlantafx.base.theme.Dracula;
 import javafx.application.Application;
@@ -37,30 +39,18 @@ public class App extends Application {
         stage.show();
         stage.setTitle("D3velop");
 
-        for(String x : controller.model.props_.asList().keySet()){
-            System.out.println(x + " : " + controller.model.props_.asList().get(x).getValue());
-        }
-        for(@SuppressWarnings("rawtypes") Property x : controller.model.props_.asList().values()){
-            x.addListener(e->{
-                for(String k : controller.model.props_.asList().keySet()){
-                    if(x.equals(controller.model.props_.asList().get(k))){
-                        System.out.println(k + " : " + x.getValue());
-                    }
-                }
-            });
-        }
         stage.setOnCloseRequest(e->{
             Platform.exit();
             System.exit(0);
         });
 
-        // new Timer().schedule(
-        //     new TimerTask() {
-        //         @Override
-        //         public void run() {
-        //             System.gc();
-        //         }
-        //     },5000, 5000);
+        new Timer().schedule(
+            new TimerTask() {
+                @Override
+                public void run() {
+                    System.gc();
+                }
+            },5000, 5000);
     }
 
     

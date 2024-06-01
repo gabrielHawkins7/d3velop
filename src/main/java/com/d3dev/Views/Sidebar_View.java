@@ -3,6 +3,7 @@ package com.d3dev.Views;
 import com.d3dev.Model;
 
 import atlantafx.base.theme.Styles;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -10,10 +11,12 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class Sidebar_View extends VBox{
@@ -29,8 +32,7 @@ public class Sidebar_View extends VBox{
 
 
         Tab develop_tab = new Tab("Develop");
-        Tab edit_tab = new Tab("Edit");
-        TabPane tabs = new TabPane(develop_tab, edit_tab);
+        TabPane tabs = new TabPane(develop_tab);
         tabs.getStyleClass().addAll(Styles.TABS_CLASSIC, Styles.DENSE);
         
         tabs.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -39,7 +41,6 @@ public class Sidebar_View extends VBox{
         HBox.setHgrow(tabs, Priority.ALWAYS);
 
         createDevelopTab(develop_tab);
-        createEditTab(edit_tab);
 
     }
 
@@ -72,27 +73,17 @@ public class Sidebar_View extends VBox{
         box1.add(outspace_combobox,3,1);
         outspace_combobox.getSelectionModel().select(1);
 
-
         
+
 
         Button dev = new Button("Develop");
         model.ui_.put("dev_button", dev);
-        col.getChildren().add(dev);
-
+        HBox row1 = new HBox(dev);
+        row1.setPadding(new Insets(5, 0, 5, 0));
+        row1.setAlignment(Pos.CENTER);
+        col.getChildren().add(row1);
 
     }
-    void createEditTab(Tab edit_tab){
-        VBox col = new VBox();
-        edit_tab.setContent(col);
-        GridPane box1 = new GridPane(10, 5);
-        col.getChildren().add(box1);
-
-        Slider brightness_slider = new Slider(-100, 100, 0);
-        model.ui_.put("brightness_slider",brightness_slider);
-        brightness_slider.setShowTickLabels(true);
-        brightness_slider.setShowTickMarks(true);
-        brightness_slider.setStyle(Styles.SMALL);
-        box1.add(brightness_slider, 3, 0);
-    }
+    
     
 }
