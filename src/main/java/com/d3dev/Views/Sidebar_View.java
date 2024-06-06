@@ -73,7 +73,15 @@ public class Sidebar_View extends VBox{
         box1.add(outspace_combobox,3,1);
         outspace_combobox.getSelectionModel().select(1);
 
-        
+        Text cb_label = new Text("Color Balance");
+        ComboBox<String> colorbalance_combobox = new ComboBox<>();
+        model.ui_.put("colorbalance_combobox", colorbalance_combobox);
+        colorbalance_combobox.getItems().addAll("Equalization", "Normalization");
+        colorbalance_combobox.getStyleClass().addAll(Styles.DENSE);
+        colorbalance_combobox.setPrefWidth(width);
+        box1.add(cb_label, 0, 2); 
+        box1.add(colorbalance_combobox,3,2);
+        colorbalance_combobox.getSelectionModel().select(1);
 
 
         Button dev = new Button("Develop");

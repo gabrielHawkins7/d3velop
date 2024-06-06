@@ -8,7 +8,6 @@ module com.d3dev {
     requires org.kordamp.ikonli.javafx;
     requires javafx.base;
     requires java.logging;
-    requires com.twelvemonkeys.common.image;
 
     exports com.d3dev;
 }

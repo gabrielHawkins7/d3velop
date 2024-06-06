@@ -14,6 +14,7 @@ public class Main_Window extends VBox{
 
     public Main_Window(Model model){
         this.model = model;
+        
     }
 
     public void addPanels(Node left, Node right){

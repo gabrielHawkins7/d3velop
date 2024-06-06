@@ -12,7 +12,6 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import com.d3dev.Utils.CMS;
 import com.d3dev.Utils.Developer;
 import com.d3dev.Utils.img_transformer;
-import com.twelvemonkeys.image.ImageUtil;
 
 import atlantafx.base.controls.Notification;
 import atlantafx.base.theme.Styles;
@@ -64,7 +63,7 @@ public class Controller {
                 model.open_image = ImageIO.read(open_file);
                 model.open_image = CMS.convertTo16Bit(model.open_image);
                 model.props_.original_cs.set(model.open_image.getColorModel().getColorSpace());
-                update_cs();
+                //update_cs();
                 Platform.runLater(()->{
                     loadImage(model.open_image);
                 });

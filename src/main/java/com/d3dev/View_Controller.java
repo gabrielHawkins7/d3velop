@@ -3,9 +3,6 @@ package com.d3dev;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.RescaleOp;
 
-import com.twelvemonkeys.image.BrightnessContrastFilter;
-import com.twelvemonkeys.image.ImageUtil;
-import com.twelvemonkeys.image.ResampleOp;
 
 import atlantafx.base.controls.ToggleSwitch;
 import javafx.scene.control.Button;

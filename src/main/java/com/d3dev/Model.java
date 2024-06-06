@@ -23,7 +23,6 @@ public class Model {
         public HashMap<String, Node> ui_ = new HashMap<>();
 
         public props_ props_ = new props_();
-
         public HashMap<String, ColorSpace> csprofiles_ = CMS.getProfiles();
 
         //Properties

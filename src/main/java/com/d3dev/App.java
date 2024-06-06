@@ -1,6 +1,12 @@
 package com.d3dev;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,6 +16,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -23,7 +30,7 @@ public class App extends Application {
     
 
     @Override
-   public void start(Stage stage) throws IOException, InterruptedException {
+   public void start(Stage stage) throws IOException, InterruptedException, URISyntaxException {
 
         Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
         
@@ -39,6 +46,8 @@ public class App extends Application {
         stage.show();
         stage.setTitle("D3velop");
 
+        
+        
         stage.setOnCloseRequest(e->{
             Platform.exit();
             System.exit(0);
@@ -57,6 +66,7 @@ public class App extends Application {
     
 
     public static void main(String[] args) {
+        
         launch();
     }
 
