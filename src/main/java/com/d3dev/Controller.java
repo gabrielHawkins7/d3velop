@@ -63,7 +63,7 @@ public class Controller {
                 model.open_image = ImageIO.read(open_file);
                 model.open_image = CMS.convertTo16Bit(model.open_image);
                 model.props_.original_cs.set(model.open_image.getColorModel().getColorSpace());
-                //update_cs();
+                update_cs();
                 Platform.runLater(()->{
                     loadImage(model.open_image);
                 });

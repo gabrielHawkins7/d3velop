@@ -32,6 +32,9 @@ import java.awt.image.DataBufferInt;
 import java.awt.image.SampleModel;
 import java.awt.image.SinglePixelPackedSampleModel;
 import java.nio.IntBuffer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
@@ -299,5 +302,37 @@ public class SwingFXUtils {
         WritablePixelFormat<IntBuffer> pf = getAssociatedPixelFormat(bimg);
         pr.getPixels(0, 0, iw, ih, pf, data, offset, scan);
         return bimg;
+    }
+        public static WritableImage toFxImage2(BufferedImage in){
+        int width = in.getWidth();
+        int height = in.getHeight();
+        WritableImage out = new WritableImage(width, height);
+        PixelWriter pixelWriter = out.getPixelWriter();
+
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+
+        for (int x = 0; x < width; x++) {
+            final int finalX = x;
+            executor.submit(() -> {
+                for (int y = 0; y < height; y++) {
+                    int rgb = in.getRGB(finalX, y);
+                    int red = (rgb >> 16) & 0xff;
+                    int green = (rgb >> 8) & 0xff;
+                    int blue = rgb & 0xff;
+                    Color fxColor = Color.rgb(red, green, blue);
+                    synchronized (pixelWriter) {
+                        pixelWriter.setColor(finalX, y, fxColor);
+                    }
+                }
+            });
+        }
+        executor.shutdown();
+        try {
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return out;
     }
 }

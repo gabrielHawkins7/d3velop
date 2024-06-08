@@ -16,9 +16,13 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import com.d3dev.App;
@@ -184,43 +188,88 @@ public class CMS {
     }
 
     static BufferedImage invert(BufferedImage image){
-        for(int x = 0; x < image.getWidth(); x++){
-            for(int y = 0; y < image.getHeight(); y++){
-                int[] tmp = new int[image.getColorModel().getNumComponents()];
-                image.getRaster().getPixel(x ,y,tmp);
-                for(int i = 0; i < tmp.length; i++){
-                    tmp[i] = 65535 - tmp[i];
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int numThreads = Runtime.getRuntime().availableProcessors();
+
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+
+        int chunkHeight = height / numThreads;
+
+        for (int i = 0; i < numThreads; i++) {
+            int startY = i * chunkHeight;
+            int endY = (i == numThreads - 1) ? height : startY + chunkHeight;
+
+            executor.submit(() -> {
+                for (int x = 0; x < width; x++) {
+                    for (int y = startY; y < endY; y++) {
+                        int[] tmp = new int[image.getColorModel().getNumComponents()];
+                        image.getRaster().getPixel(x, y, tmp);
+                        for (int j = 0; j < tmp.length; j++) {
+                            tmp[j] = 65535 - tmp[j];
+                        }
+                        image.getRaster().setPixel(x, y, tmp);
+                    }
                 }
-                image.getRaster().setPixel(x, y, tmp);
-            }
+            });
         }
+
+        executor.shutdown();
+        try {
+            executor.awaitTermination(1, TimeUnit.HOURS);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return image;
     }
 
     public static BufferedImage convertTo16Bit(BufferedImage image){
-        
         ColorSpace cs = image.getColorModel().getColorSpace();
         ComponentColorModel cm = new ComponentColorModel(cs, false, false, BufferedImage.OPAQUE, DataBuffer.TYPE_USHORT);
-        WritableRaster wr = Raster.createInterleavedRaster(DataBuffer.TYPE_USHORT, image.getWidth(), image.getHeight(), image.getWidth() * 3,3,new int[]{0,1,2}, null);
+        WritableRaster wr = Raster.createInterleavedRaster(DataBuffer.TYPE_USHORT, image.getWidth(), image.getHeight(), image.getWidth() * 3, 3, new int[]{0, 1, 2}, null);
         BufferedImage out = new BufferedImage(cm, wr, false, null);
-        for(int x = 0; x < image.getWidth(); x++){
-            for(int y = 0; y < image.getHeight(); y++){
-                int[] pixel = new int[image.getColorModel().getNumComponents()];
-                image.getRaster().getPixel(x, y, pixel);
-                
-                if(image.getColorModel().getPixelSize() == 48){
-                    int[] outPix = {pixel[0] , pixel[1] , pixel[2] };
-                    out.getRaster().setPixel(x, y, outPix);
 
-                }else{
-                    int[] outPix = {pixel[0] << 8, pixel[1] << 8, pixel[2] << 8};
-                    out.getRaster().setPixel(x, y, outPix);
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int chunkHeight = height / 4;
 
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+        List<Future<?>> futures = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            final int startY = i * chunkHeight;
+            final int endY = (i == 4 - 1) ? height : startY + chunkHeight;
+
+            Future<?> future = executor.submit(() -> {
+                for (int x = 0; x < width; x++) {
+                    for (int y = startY; y < endY; y++) {
+                        int[] pixel = new int[image.getColorModel().getNumComponents()];
+                        image.getRaster().getPixel(x, y, pixel);
+                        if (image.getColorModel().getPixelSize() == 48) {
+                            int[] outPix = {pixel[0], pixel[1], pixel[2]};
+                            out.getRaster().setPixel(x, y, outPix);
+                        } else {
+                            int[] outPix = {pixel[0] << 8, pixel[1] << 8, pixel[2] << 8};
+                            out.getRaster().setPixel(x, y, outPix);
+                        }
+                    }
                 }
-                
+            });
+            futures.add(future);
+        }
+
+        for (Future<?> future : futures) {
+            try {
+                future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         }
 
+        executor.shutdown();
         return out;
     }
 }

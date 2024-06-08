@@ -63,7 +63,7 @@ public class Image_View extends ScrollPane{
         
     }   
     public void loadImage(BufferedImage img){ 
-            Image i = SwingFXUtils.toFXImage(img, null);
+            Image i = SwingFXUtils.toFxImage2(img);
             loadImage(i);
     } 
 
