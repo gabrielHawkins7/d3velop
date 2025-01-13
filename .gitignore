@@ -3,3 +3,4 @@ Conveyor/
 Target/
 conveyor.conf
 output/
+src/main/resources/
