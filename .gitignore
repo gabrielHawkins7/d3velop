@@ -4,3 +4,4 @@ Target/
 conveyor.conf
 output/
 src/main/resources/
+*.log

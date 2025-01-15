@@ -29,7 +29,7 @@ public class Main extends Application {
         Controller controller = new Controller(handle);
         Props._devmode = true;
         Props._log = true;
-        
+
 
     }
 
@@ -61,7 +61,8 @@ public class Main extends Application {
         }
 
 
-        
+
+        ImGui.showDemoWindow();
 
 
     }

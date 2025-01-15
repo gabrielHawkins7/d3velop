@@ -46,6 +46,8 @@ public class Texture {
     public int height;
     public int texture_id;
     ShortBuffer rgb_16_buffer;
+
+    
     public File fn;
 
     private String icc_path;
@@ -103,6 +105,7 @@ public class Texture {
 
                         image = image.autorot();
 
+                        
                         
                         
                         image = image.cast(VipsBandFormat.FORMAT_USHORT, VipsOption.Boolean("shift", true));
