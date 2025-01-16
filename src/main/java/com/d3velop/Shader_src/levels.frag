@@ -5,14 +5,10 @@ out vec4 fragColor;
 
 uniform sampler2D tex;
 
-uniform float _temp;
-uniform float _tint;
-uniform float _exposure;
-uniform float _contrast;
-uniform float _high;
-uniform float _low;
-uniform float _saturation;
-
+uniform float _Ltint;
+uniform float _Htint;
+uniform float _Lsaturation;
+uniform float _Hsaturation;
 
 
 
@@ -66,78 +62,36 @@ vec3 whiteBalance(in vec3 rgb, in float temp, in float tint) {
     return lms2lin_mat * lms;
 }
 
-
-
-
-
-vec3 exposure(vec3 v, float a) { return v * pow(2., a); }
-vec3 contrast(in vec3 v, in float a) { return (v - 0.5 ) * a + 0.5; }
-
-vec3 levelsOutputRange(in vec3 v, in vec3 oMin, in vec3 oMax) { return mix(oMin, oMax, v); }
-vec3 levelsOutputRange(in vec3 v, in float oMin, in float oMax) { return levelsOutputRange(v, vec3(oMin), vec3(oMax)); }
-
-float rgb2luma(const in vec3 rgb) { return dot(rgb, vec3(0.2126, 0.7152, 0.0722)); }
-float luma(in vec3 v) { return rgb2luma(v); }
-
-
-
-vec3 highLow(vec3 color, float l, float h){
-    return (color + vec3(l)) * h;
-}
-
-vec3 saturation(vec3 color, float s){
-    // Algorithm from Chapter 16 of OpenGL Shading Language
-    const vec3 W = vec3(0.2125, 0.7154, 0.0721);
-    vec3 intensity = vec3(dot(color, W));
-    return mix(intensity, color, s);
-}
-
-vec3 shadowSat(vec3 color, float l, float h){
-    // Algorithm from Chapter 16 of OpenGL Shading Language
-    float luma = luma(color);
-
-    // Convert to grayscale for brightness analysis
-    float luminance = dot(color.rgb, vec3(0.299, 0.587, 0.114));
-
+vec3 wbLevels(in vec3 rgb, in float Ltint, in float Htint) {
+    float luminance = dot(rgb, vec3(0.299, 0.587, 0.114));
+    
     float adjustment = 1.0;
-
-    // Shadows
+     // Shadows
     if (luminance < 0.3) {
-        adjustment = l;
+        adjustment = Ltint;
     } 
     // Highlights
     else if (luminance > 0.7) {
-        adjustment = h;
+        adjustment = Htint;
     } 
     // Midtones
     else {
         float shadowWeight = (0.7 - luminance) / (0.7 - 0.3);
         float highlightWeight = (luminance - 0.3) / (0.7 - 0.3);
-        adjustment = shadowWeight * l + highlightWeight * h;
+        adjustment = shadowWeight * Ltint + highlightWeight * Htint;
     }
-
-    // Apply the adjustment
-    vec3 adjustedColor = color.rgb * adjustment;
-
-    return adjustedColor;
+    // Check if either Ltint or Htint is non-zero
+    if (Ltint != 0.0 || Htint != 0.0) {
+        return whiteBalance(rgb, 1.0, adjustment);
+    }
+    
+    // If both are zero, return the original RGB without adjustment
+    return rgb;
 }
-
-
 
 
 void main() {
     vec4 col = texture(tex, fragTexCoord);
-    col.rgb = exposure(col.rgb, _exposure);
-    col.rgb = contrast(col.rgb, _contrast);
-    col.rgb = whiteBalance(col.rgb, _temp, _tint);
-    col.rgb = highLow(col.rgb, _low, _high);
-	col.rgb = saturation(col.rgb, _saturation);
-
-    
-
-
-    col.rgb = levelsOutputRange(col.rgb, 0.0, 1.0);
-
-    
+    col.rgb = wbLevels(col.rgb, _Ltint, _Htint);
     fragColor = col;
 }

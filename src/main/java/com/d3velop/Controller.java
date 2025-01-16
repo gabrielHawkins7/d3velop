@@ -25,7 +25,6 @@ public class Controller {
         public static ImGuiIO io;
         public static Texture current_texture;
         public static Renderer renderer;
-
     }
 
     public class Edit_Props{
@@ -36,8 +35,13 @@ public class Controller {
         public static float[] _high = {1.0f};
         public static float[] _low = {0.0f};
         public static float[] _saturation = {1.0f};
+    }
 
-
+    public class Levels_Props{
+        public static float[] _Ltint = new float[1];
+        public static float[] _Htint = new float[1];
+        public static float[] _Lsaturation = {1.0f};
+        public static float[] _Hsaturation = {1.0f};
     }
 
     public class Props{

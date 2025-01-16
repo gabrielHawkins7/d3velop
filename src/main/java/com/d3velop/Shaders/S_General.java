@@ -4,11 +4,11 @@ import org.lwjgl.opengl.GL20;
 
 import com.d3velop.Controller.Edit_Props;
 
-public class S_Edit extends Shader {
+public class S_General extends Shader {
 
     
-    public S_Edit() {
-        name = "Edit Shader";
+    public S_General() {
+        name = "General Shader";
         
         String vertsource = "src/main/java/com/d3velop/Shader_src/image.vert";
         setVertSource(vertsource);
@@ -40,14 +40,6 @@ public class S_Edit extends Shader {
         GL20.glUniform1f(_low, Edit_Props._low[0]);
         GL20.glUniform1f(_high, Edit_Props._high[0]);
         GL20.glUniform1f(_saturation, Edit_Props._saturation[0]);
-
-
-        
-        
-        
-        
-        
-
         super.bindData();
     }
 
