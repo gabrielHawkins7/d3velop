@@ -11,6 +11,7 @@ import com.d3velop.Controller.Props;
 import com.d3velop.GL.GLUtils;
 import com.d3velop.Window.W_Crash;
 import com.d3velop.Window.W_Dev;
+import com.d3velop.Window.W_Edit;
 import com.d3velop.Window.W_ImageView;
 import com.d3velop.Window.W_Loading;
 import com.d3velop.Window.W_Log;
@@ -70,6 +71,8 @@ public class Main extends Application {
         ImGui.showDemoWindow();
 
         W_ShaderEditor.view();
+
+        W_Edit.view();
         
 
 

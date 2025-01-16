@@ -22,6 +22,7 @@ public class S_Image extends Shader {
         setVertSource(vertsource);
         String fragsource = "src/main/java/com/d3velop/Shader_src/image.frag";
         setFragSource(fragsource);
+       
     }
 
     public void setImageId(int imageid){

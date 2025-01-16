@@ -28,6 +28,18 @@ public class Controller {
 
     }
 
+    public class Edit_Props{
+        public static float[] _temp = new float[1];   
+        public static float[] _tint = new float[1];
+        public static float[] _exposure = {0.0f};
+        public static float[] _contrast = {1.0f};
+        public static float[] _high = {1.0f};
+        public static float[] _low = {0.0f};
+        public static float[] _saturation = {1.0f};
+
+
+    }
+
     public class Props{
         public static boolean  _logscroll;
         public static boolean  _devmode;

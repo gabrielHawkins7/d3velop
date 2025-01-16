@@ -12,7 +12,7 @@ import imgui.flag.ImGuiWindowFlags;
 
 public class W_ImageView {
     public static void view(){
-        int flags = ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoSavedSettings;
+        int flags = ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoBringToFrontOnFocus;
         ImGuiViewport viewport = getMainViewport();
         setNextWindowPos(viewport.getWorkPosX(), viewport.getWorkPosY());
         int imgviewSize = (int) ((int) viewport.getSizeX() - (viewport.getSizeX() * .3));

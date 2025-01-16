@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 
 public abstract class Shader {
@@ -40,6 +41,12 @@ public abstract class Shader {
     public String frag_content;
     public String vertsource;
     public String vert_content;
+
+    public UUID id;
+
+    Shader(){
+        id = UUID.randomUUID();
+    }
 
 
 

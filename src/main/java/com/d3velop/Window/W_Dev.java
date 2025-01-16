@@ -2,6 +2,7 @@ package com.d3velop.Window;
 import static imgui.ImGui.*;
 
 import java.io.File;
+import java.util.UUID;
 
 import com.d3velop.Controller;
 import com.d3velop.Controller.Data;
@@ -54,9 +55,11 @@ public class W_Dev{
                 text("_loading_progress: " + Loading._loading_progress);
                 text("_zoom: " + Props._zoom);
 
-                if(beginTable("Shaders",2)){
+                if(beginTable("Shaders",3)){
                     tableSetupColumn("Shader");
                     tableSetupColumn("Compiled");
+                    tableSetupColumn("ID");
+
                     tableHeadersRow();
 
                     for(Shader i : Data.renderer.shader_list){
@@ -65,6 +68,9 @@ public class W_Dev{
                         text(i.name);
                         tableNextColumn();
                         text(i._compiled ? "YES":"NO");
+                        tableNextColumn();
+                        text(i.id.toString());
+                        
                     }
                     endTable();
                 }
