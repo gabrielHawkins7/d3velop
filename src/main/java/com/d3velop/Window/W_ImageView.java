@@ -41,7 +41,10 @@ public class W_ImageView {
 
         setCursorPosY((viewport.getWorkSizeY() / 2.0f) - (image_size.y / 2.0f));
 
-        image(Data.current_texture.texture_id, image_size);
+        //image(Data.current_texture.texture_id, image_size);
+
+        Data.renderer.render(Data.current_texture);
+        image(Data.renderer.fb.id, image_size);
 
         end();
     }

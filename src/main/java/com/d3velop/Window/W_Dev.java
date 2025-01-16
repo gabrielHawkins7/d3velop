@@ -8,6 +8,8 @@ import com.d3velop.Controller.Data;
 import com.d3velop.Controller.Loading;
 import com.d3velop.Controller.Props;
 import com.d3velop.Native.Vips_Lib;
+import com.d3velop.Shaders.Shader;
+import com.d3velop.Shaders.Shader.InvalidShaderException;
 
 import imgui.ImGui;
 
@@ -51,6 +53,24 @@ public class W_Dev{
                 text("_is_loading: " + Loading._is_loading);
                 text("_loading_progress: " + Loading._loading_progress);
                 text("_zoom: " + Props._zoom);
+
+                if(beginTable("Shaders",2)){
+                    tableSetupColumn("Shader");
+                    tableSetupColumn("Compiled");
+                    tableHeadersRow();
+
+                    for(Shader i : Data.renderer.shader_list){
+                        tableNextRow();
+                        tableNextColumn();
+                        text(i.name);
+                        tableNextColumn();
+                        text(i._compiled ? "YES":"NO");
+                    }
+                    endTable();
+                }
+                if(button("Compile Shaders")){
+                    Controller.compile_shaders();
+                }
             }
             ImGui.end();
     }

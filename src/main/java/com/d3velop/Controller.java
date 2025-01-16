@@ -1,10 +1,14 @@
 package com.d3velop;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.d3velop.Renderer.Renderer;
 import com.d3velop.Renderer.Texture;
+import com.d3velop.Shaders.Shader;
+import com.d3velop.Shaders.Shader.InvalidShaderException;
 
 import imgui.ImGui;
 import imgui.ImGuiIO;
@@ -20,6 +24,7 @@ public class Controller {
         public static long glfw_win;
         public static ImGuiIO io;
         public static Texture current_texture;
+        public static Renderer renderer;
 
     }
 
@@ -43,8 +48,23 @@ public class Controller {
     Controller(long glfw_win){
         Data.glfw_win = glfw_win;
         Data.io = ImGui.getIO();
+        Data.renderer = new Renderer();
+        compile_shaders();
     }
 
+
+    public static void compile_shaders(){
+        for(Shader i : Data.renderer.shader_list){
+            try {
+                i.compile();
+            } catch (InvalidShaderException | IOException e) {
+                Controller.logError(e.getMessage());
+            }
+            if(i._compiled){
+                logInfo(i.name + " : Compiled");
+            }
+        }
+    }
 
     public static void load_texture(File fn){
         if(Data.current_texture != null){
