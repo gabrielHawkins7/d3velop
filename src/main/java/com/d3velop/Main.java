@@ -70,9 +70,10 @@ public class Main extends Application {
 
         ImGui.showDemoWindow();
 
-        W_ShaderEditor.view();
 
         W_Edit.view();
+        W_ShaderEditor.view();
+
         
 
 
