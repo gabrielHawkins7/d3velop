@@ -3,7 +3,11 @@
     "glfw3",
     {
       "name": "hello-imgui",
-      "features": ["glfw-binding", "opengl3-binding", "freetype-lunasvg"]
+      "features": [
+        "freetype-lunasvg",
+        "glfw-binding",
+        "opengl3-binding"
+      ]
     },
     "opengl"
   ]

@@ -1,7 +1,7 @@
 #pragma once
 #include <hello_imgui/runner_params.h>
 #include "Params.h"
-#include <iostream>
+#include "renderer.h"
 
 
 
@@ -12,15 +12,25 @@ class D3velop {
         static D3velop& getInstance();
 
 
+        void preRun();
+        void run();
+        void newImage(PATH fn);
 
+        void newImageFromFile();
 
-        HelloImGui::RunnerParams getRunParams();
+        Renderer renderer;
 
-
+        GUI_PARAMS gui_params;
+        GLCONFIG glconfig;
+        APP_STATE app_state;
+        Log log;
 
     private:
-        HelloImGui::RunnerParams runParams;
         bool running = false;
+
+        void check_vips();
+        void get_glconfig();
+
         D3velop();
         ~D3velop();
 };

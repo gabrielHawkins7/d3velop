@@ -1,0 +1,6 @@
+-----TODO-----
+- Add viewing images through the framebuffer
+- Find a way to manage shaders
+- Add zoom
+- Add resolution to framebuffer
+- Add edit shaders

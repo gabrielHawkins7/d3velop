@@ -18,11 +18,28 @@ find_library(VIPS NAMES vips.42 PATHS external/libvips/lib)
 
 find_library(VIPSCPP NAMES vips-cpp.42 PATHS external/libvips/lib)
 
+set(TFD_SOURCES  external/tfd/tinyfd_moredialogs.c external/tfd/tinyfiledialogs.c)
+set(TFD_INCLUDE  external/tfd)
+
 
 add_executable(d3velop
     src/main.cpp
     src/D3velop.cpp
+    src/gui.cpp
+    src/gl.cpp
+    src/d3vips.cpp
+    src/renderer.cpp
+    src/shader.cpp
+    src/framebuffer.cpp
+    ${TFD_SOURCES}
 )
+
+include_directories(
+    ${TFD_INCLUDE}
+)
+
+
+
 
 add_custom_command(
     TARGET d3velop

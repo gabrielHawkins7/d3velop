@@ -4,17 +4,17 @@
 [
   {
     "label": "configure",
-    "command": "cd build && cmake -G 'Ninja' --toolchain \"/Library/Dev/vcpkg/scripts/buildsystems/vcpkg.cmake\"  ..",
+    "command": "cd build && cmake -G 'Ninja' --toolchain \"/Library/Dev/vcpkg/scripts/buildsystems/vcpkg.cmake\" -DCMAKE_BUILD_TYPE=DEBUG  ..",
     "use_new_terminal": false
   },
   {
     "label": "build_run",
-    "command": "cd build && cmake --build . && ./d3velop",
+    "command": "cd build && cmake --build  . && ./d3velop",
     "use_new_terminal": false
   },
   {
     "label": "debug",
-    "command": "cd build && lldb helllo",
+    "command": "cd build && lldb d3velop",
     "use_new_terminal": false
   },
   {
