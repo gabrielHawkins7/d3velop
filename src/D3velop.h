@@ -1,36 +1,33 @@
 #pragma once
-#include <hello_imgui/runner_params.h>
 #include "Params.h"
 #include "renderer.h"
-
-
+#include <hello_imgui/runner_params.h>
 
 class D3velop {
-    public:
-        D3velop(const D3velop&) = delete;
-        D3velop& operator=(const D3velop&) = delete;
-        static D3velop& getInstance();
+public:
+  D3velop(const D3velop &) = delete;
+  D3velop &operator=(const D3velop &) = delete;
+  static D3velop &getInstance();
 
+  void preRun();
+  void run();
+  void newImage(PATH fn);
 
-        void preRun();
-        void run();
-        void newImage(PATH fn);
+  void newImageFromFile();
 
-        void newImageFromFile();
+  Renderer renderer;
 
-        Renderer renderer;
+  GUI_PARAMS gui_params;
+  GLCONFIG glconfig;
+  APP_STATE app_state;
+  Log log;
 
-        GUI_PARAMS gui_params;
-        GLCONFIG glconfig;
-        APP_STATE app_state;
-        Log log;
+private:
+  bool running = false;
 
-    private:
-        bool running = false;
+  void check_vips();
+  void get_glconfig();
 
-        void check_vips();
-        void get_glconfig();
-
-        D3velop();
-        ~D3velop();
+  D3velop();
+  ~D3velop();
 };

@@ -16,6 +16,8 @@ target("htest")
     add_packages("libvips")
     add_packages("tinyfiledialogs")
     add_files("src/*.cpp")
+    set_configdir("$(buildir)/$(plat)/$(arch)/$(mode)/assets")
+    add_configfiles("assets/*", {onlycopy = true})
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
