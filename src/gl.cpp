@@ -1,4 +1,5 @@
 #include "gl.h"
+#include "util.h"
 
 int D3GL::uploadTexture(VIPSBUFFERDATA vbd, TEXTURE_DATA tex) {
   GLuint textureID;

@@ -44,7 +44,7 @@ int main() {
     HelloImGui::FontLoadingParams fontParams;
     fontParams.insideAssets = false;
     HelloImGui::LoadFontDpiResponsive(
-        HelloImGui::AssetFileFullPath("Roboto-Regular.ttf", true), 14.0f,
+        HelloImGui::AssetFileFullPath("Roboto-Regular.ttf", true), 18.0f,
         fontParams);
     // HelloImGui::LoadFontDpiResponsive("../assets/Roboto-Regular.ttf", 14.0f,
     // fontParams);

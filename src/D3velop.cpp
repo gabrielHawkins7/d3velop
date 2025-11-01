@@ -5,7 +5,9 @@
 #include "util.h"
 #include "vips/vips.h"
 #include "vips/vips8"
+#include <exception>
 #include <filesystem>
+#include <stdexcept>
 #include <string>
 
 // PUBLIC:
@@ -18,8 +20,8 @@ void D3velop::preRun() {
   UTIL::log(UTIL::SUCCESS, "D3VELOP RUNNING");
   check_vips();
   get_glconfig();
-  renderer.fb.genFrameBuffer();
-  renderer.compile_shaders();
+  init_renderer();
+  newImage("/home/gabe/dev/d3velop/assets/portra400.tiff");
 }
 
 void D3velop::run() {
@@ -71,7 +73,6 @@ void D3velop::newImageFromFile() {
 }
 
 // PRIVATE:
-
 void D3velop::check_vips() {
   if (VIPS_INIT("D3VELOP")) {
     app_state.vips_enabled = false;
@@ -88,6 +89,16 @@ void D3velop::check_vips() {
 }
 
 void D3velop::get_glconfig() { D3GL::getGlConfigData(glconfig); }
+
+void D3velop::init_renderer() {
+  try {
+    renderer.fb.genFrameBuffer();
+    renderer.compile_shaders();
+  } catch (const std::runtime_error e) {
+
+    UTIL::print(e.what());
+  }
+};
 
 D3velop::D3velop() { std::cout << "D3velop Constructor Called\n"; }
 D3velop::~D3velop() { std::cout << "D3velop Destructor Called\n"; }

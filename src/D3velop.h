@@ -27,7 +27,7 @@ private:
 
   void check_vips();
   void get_glconfig();
-
+  void init_renderer();
   D3velop();
   ~D3velop();
 };

@@ -9,12 +9,10 @@ using namespace vips;
 void getImageData(TEXTURE_DATA &tex) {
   UTIL::log(UTIL::INFO, std::string("Loading file: ").append(tex.fn).c_str());
 
-  VImage vi = VImage::new_from_file(tex.fn.c_str(), nullptr);
-  VImage::option()->set("access", VIPS_ACCESS_SEQUENTIAL);
+  VImage vi = VImage::new_from_file(tex.fn.c_str(), NULL);
 
-  if ((vi.width() & 2) != 0) {
-    vi = vi.crop(0, 0, vi.width() - 1, vi.height());
-  }
+  vi = vi.rot90();
+  vi = vi.crop(0, 0, vi.width() - 1, vi.height());
 
   tex.width = vi.width();
   tex.height = vi.height();

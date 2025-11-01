@@ -1,4 +1,5 @@
 #include "gui.h"
+#include "hello_imgui/hello_imgui_assets.h"
 #include "util.h"
 #include <imgui.h>
 
@@ -92,6 +93,7 @@ void GUI::dev_view(D3velop &d3velop) {
     SeparatorText("Shader:");
     if (d3velop.renderer.image_shader != nullptr) {
       Text("Name: %s", d3velop.renderer.image_shader->name.c_str());
+      Text("%s", d3velop.renderer.image_shader->shader_data.frag_data.c_str());
     }
   }
 

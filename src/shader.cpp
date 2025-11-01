@@ -87,6 +87,7 @@ void Shader::createShader() {
     glDeleteProgram(program);
     return;
   }
+
   glValidateProgram(program);
 
   // deletes intermediate objects
